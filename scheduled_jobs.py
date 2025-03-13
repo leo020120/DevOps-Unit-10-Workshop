@@ -2,7 +2,7 @@ from data.database import save_order, get_all_orders
 from products import create_product_download
 from apscheduler.schedulers.background import BackgroundScheduler
 import requests
-#
+
 
 def initialise_scheduled_jobs(app):
     scheduler = BackgroundScheduler()
@@ -44,6 +44,7 @@ def process_orders(app):
             save_order(order)
         except Exception:
             app.logger.exception("Error processing order {id}".format(id = order.id))
+            order.set_as_failed()
 
 def get_queue_of_orders_to_process():
     allOrders = get_all_orders()
